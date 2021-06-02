@@ -1,0 +1,116 @@
+/* This file is for your main application css. */
+@import "./phoenix.css";
+
+
+.week {
+  display: grid;
+  border: 1px solid black;
+  grid-template-columns: repeat(5, 1fr);
+}
+
+.week > * {
+  border-right: 1px solid black;
+}
+
+.week .Friday { 
+  border-right: none;
+}
+
+.week .past {
+  background-color: #E0E0DB;
+}
+
+.week .today .header {
+  font-weight: bold;
+}
+
+.week .header {
+  text-align: center;
+  border-bottom: 1px solid black;
+  padding: 0.5rem 0;
+}
+.controls {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+    align-items: center;
+
+  .title {
+    font-weight: bold;
+  }
+
+  .nav {
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 1rem;
+    align-items: center;
+
+    .right, .left, .today {
+      cursor: pointer;
+      background-color: transparent;
+      padding: unset;
+      margin: unset;
+      color: #000;
+      border: none;
+      font-size: 16px;
+      font-family: Helvetica;
+      display: flex;
+    }
+
+    .today {
+      margin: 0 0.5rem;
+      padding: 6px 12px;
+      border-radius: 4px;
+      &:hover {
+        background-color: #F5F5F5;
+      }
+    }
+  }
+}
+
+.openings ol, li {
+  list-style: none;
+  padding: unset;
+  margin: unset;
+  text-align: center;
+}
+
+.openings li {
+  padding: 0.5rem;
+  margin: 0.25rem;
+  cursor: pointer;
+  border-radius: 4px;
+  &:hover {
+    background-color: #F5F5F5;
+  }
+  &.selected {
+    background-color: #1E5472;
+    color: #fff;
+  }
+}
+
+
+.mrow {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.disclaimer {
+
+}
+
+.schedule {
+  padding: 12px 24px;
+  background-color: #D94F48;
+  cursor: pointer;
+  color: #fff;
+  font-size: 16px;
+  margin-top: 0.5rem;
+  border: none;
+  border-radius: 4px;
+  &:hover {
+    background-color: #DB8679;
+  }
+}
