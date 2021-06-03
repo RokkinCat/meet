@@ -1,6 +1,8 @@
 defmodule MeetWeb.PageLive do
   use MeetWeb, :live_view
 
+  alias Meet.Availability
+
   @impl true
   def mount(params, _session, socket) do
     today = case params["date"] do
@@ -70,39 +72,12 @@ defmodule MeetWeb.PageLive do
     {:noreply, socket}
   end
 
+
+
   defp weekdays(day) do
     beginning = Timex.beginning_of_week(day, :mon)
     ending    = Timex.end_of_week(day, :sat)
     Timex.Interval.new(from: beginning, until: ending, right_open: false, step: [days: 1])
-  end
-
-  def available_times_on(schedule, day) do
-    beginning = Timex.set(day, hour: 9, minute: 0, second: 0)
-    ending    = Timex.set(day, hour: 16, minute: 0, second: 0)
-    Timex.Interval.new(from: beginning, until: ending, right_open: false, step: [minutes: 30])
-    |> Enum.map(fn(dt) -> Timex.to_datetime(dt, "America/Chicago") end)
-    |> Enum.filter(&(available?(schedule, &1)))
-  end
-
-  defp available?(schedule, datetime) do
-    filtered = Enum.filter(schedule, &(&1.dtend != nil))
-               |> Enum.filter(fn(event) -> 
-                 Timex.diff(event.dtstart, datetime, :days) == 0
-               end)
-
-    if Timex.diff(datetime, Timex.now("America/Chicago")) < 0  do
-      # If in the past, can't schedule for this time
-      false 
-    else
-      !Enum.any?(filtered, fn(event) -> 
-        datetime_during_event?(event, datetime)     
-      end)
-    end
-  end
-
-  def datetime_during_event?(event, datetime) do
-    Timex.diff(Timex.shift(event.dtstart, minutes: -30), datetime) <= 0 && 
-    Timex.diff(Timex.shift(event.dtend, minutes: 30), datetime) >= 0
   end
 
   def is_today?(day) do
@@ -121,7 +96,7 @@ defmodule MeetWeb.PageLive do
   defp build_week(day, events) do
     weekdays(day)
     |> Enum.map(fn(d) -> 
-      {d, available_times_on(events, d)}
+      {d, Availability.available_times_on(events, d)}
     end)
     |> Enum.sort(fn({d1,_}, {d2, _}) ->
       Timex.diff(d1, d2) <= 0
