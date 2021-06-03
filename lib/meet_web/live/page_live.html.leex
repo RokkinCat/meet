@@ -3,7 +3,7 @@
     Week of <%= Timex.format!(weekdays(@today).from, "{Mfull} {D}, {YYYY}") %>
   </div>
   <div class="nav">
-    <%= if !is_past?(elem(hd(@weekdays), 0)) do %>
+    <%= if !week_contains_today(@weekdays) do %>
     <button class="left" phx-click="dec_week">&larr;</button>
     <% end %>
     <button class="today" phx-click="set_today">Today</button>
@@ -16,8 +16,8 @@
                 day 
                 <%= Timex.format!(day, "{WDfull}") %> 
                 <%= if is_today?(day), do: "today" %>
-                <%= if is_past?(day), do: "past" %>
-                <%= if Enum.count(times) == 0, do: "past" %>
+                <%= if is_past?(day), do: "disable" %>
+                <%= if Enum.count(times) == 0, do: "disable" %>
 
      ">
       <div class="header"><%= Timex.format!(day, "{WDshort} {M}/{D}")%></div>

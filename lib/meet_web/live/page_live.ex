@@ -38,7 +38,13 @@ defmodule MeetWeb.PageLive do
       _ -> Timex.now("America/Chicago")
     end
     weekdays = build_week(today, socket.assigns.events)
-    {:noreply, assign(socket, today: today, weekdays: weekdays, selected: nil)}
+    if all_weekdays_are_past(weekdays) do
+      today = Timex.now("America/Chicago")
+              |> Timex.format!("{YYYY}-{0M}-{0D}")
+      {:noreply, push_patch(socket, to: "/#{today}")}
+    else
+      {:noreply, assign(socket, today: today, weekdays: weekdays, selected: nil)}
+    end
   end
 
   @impl true
@@ -75,8 +81,6 @@ defmodule MeetWeb.PageLive do
     {:noreply, socket}
   end
 
-
-
   defp weekdays(day) do
     beginning = Timex.beginning_of_week(day, :mon)
     ending    = Timex.end_of_week(day, :sat)
@@ -94,6 +98,15 @@ defmodule MeetWeb.PageLive do
   def is_selected?(nil, _), do: false
   def is_selected?(ref, target) do
     Timex.diff(ref, target, :minutes) == 0
+  end
+
+  def week_contains_today(week) do
+    today = Timex.now("America/Chicago")
+    Enum.find(week, fn({d,_}) -> Timex.diff(d, today, :days) == 0 end) != nil
+  end
+
+  def all_weekdays_are_past(week) do
+    Enum.all?(week, fn({d,_}) -> is_past?(d) end)
   end
 
   defp build_week(day, events) do
