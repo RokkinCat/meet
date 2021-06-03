@@ -26,6 +26,7 @@ defmodule MeetWeb.PageLive do
     {:ok, assign(socket, today: today, weekdays: weekdays, events: events, selected: nil)}
   end
 
+  @impl true
   def handle_params(%{"date" => date}, _, socket) do
     today = case Timex.parse(date, "{YYYY}-{0M}-{0D}") do
       {:ok, pdate} -> pdate
@@ -35,6 +36,11 @@ defmodule MeetWeb.PageLive do
     {:noreply, assign(socket, today: today, weekdays: weekdays, selected: nil)}
   end
 
+  @impl true
+  def handle_params(%{}, url, socket), do: handle_params(%{"date" => ""}, url, socket)
+
+
+  @impl true
   def handle_event("inc_week", _, socket) do
     today = Timex.shift(socket.assigns.today, weeks: 1)
             |> Timex.format!("{YYYY}-{0M}-{0D}")
