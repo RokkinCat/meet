@@ -14,6 +14,8 @@ defmodule MeetWeb.PageLive do
 
     events = ICalendar.from_ics(raw)
              |> Enum.flat_map(fn(event) ->
+               # Right now this handles recurring events by extrapolating their recur rule one year into
+               # the future and then merging them into the whole list
                recurrences = ICalendar.Recurrence.get_recurrences(event, Timex.shift(today, years: 1))
                |> Enum.to_list()
                case Enum.at(recurrences, 0) do
@@ -21,6 +23,7 @@ defmodule MeetWeb.PageLive do
                  _ -> Enum.concat([event], recurrences)
                end
              end)
+             |> Enum.filter(fn(event) -> !is_past?(event.dtstart) end) # This probably breaks for multi-day events
              |> Enum.sort(fn(a,b) -> Timex.diff(today, b.dtstart) > Timex.diff(today, a.dtstart) end)
 
     weekdays = build_week(today, events)

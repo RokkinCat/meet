@@ -3,7 +3,9 @@
     Week of <%= Timex.format!(weekdays(@today).from, "{Mfull} {D}, {YYYY}") %>
   </div>
   <div class="nav">
+    <%= if !is_past?(elem(hd(@weekdays), 0)) do %>
     <button class="left" phx-click="dec_week">&larr;</button>
+    <% end %>
     <button class="today" phx-click="set_today">Today</button>
     <button class="right" phx-click="inc_week">&rarr;</button>
   </div>

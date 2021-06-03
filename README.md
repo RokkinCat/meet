@@ -9,12 +9,13 @@ To start your Phoenix server:
 
 Now you can visit [`localhost:4000`](http://localhost:4000) from your browser.
 
-Ready to run in production? Please [check our deployment guides](https://hexdocs.pm/phoenix/deployment.html).
+## Roadmap
 
-## Learn more
-
-  * Official website: https://www.phoenixframework.org/
-  * Guides: https://hexdocs.pm/phoenix/overview.html
-  * Docs: https://hexdocs.pm/phoenix
-  * Forum: https://elixirforum.com/c/phoenix-forum
-  * Source: https://github.com/phoenixframework/phoenix
+- [ ] Move the scheduler live view to its own view
+- [ ] More dynamic processing of recurring events
+- [ ] Add live view to collect info from the person requesting the meeting (Subject, agenda, email address, name)
+- [ ] Live fetch calendar
+- [ ] Add bamboo or swoosh with postmark to send ICS file
+- [ ] Support for multiple calendar URLs
+- [ ] Graceful support for multi-day events
+- [ ] Deployment
