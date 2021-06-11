@@ -5,10 +5,7 @@ defmodule MeetWeb.TimeSelectLive do
 
   @impl true
   def mount(params, _session, socket) do
-    today = case params["date"] do
-      nil -> Timex.now("America/Chicago")
-      date -> Timex.parse!(date, "{YYYY}-{0M}-{0D}")
-    end
+    today = date_from_params(params)
 
     {:ok, raw} = File.read("./nick_at_rokkincat.ics")
 
@@ -32,14 +29,12 @@ defmodule MeetWeb.TimeSelectLive do
   end
 
   @impl true
-  def handle_params(%{"date" => date}, _, socket) do
-    today = case Timex.parse(date, "{YYYY}-{0M}-{0D}") do
-      {:ok, pdate} -> pdate
-      _ -> Timex.now("America/Chicago")
-    end
+  def handle_params(params, _, socket) do
+    today = date_from_params(params)
     weekdays = build_week(today, socket.assigns.events)
+
     if all_weekdays_are_past(weekdays) do
-      today = Timex.now("America/Chicago")
+      today = Timex.now(Meet.timezone())
               |> Timex.format!("{YYYY}-{0M}-{0D}")
       {:noreply, push_patch(socket, to: "/#{today}")}
     else
@@ -48,37 +43,38 @@ defmodule MeetWeb.TimeSelectLive do
   end
 
   @impl true
-  def handle_params(%{}, url, socket), do: handle_params(%{"date" => ""}, url, socket)
-
-
-  @impl true
   def handle_event("inc_week", _, socket) do
     today = Timex.shift(socket.assigns.today, weeks: 1)
             |> Timex.format!("{YYYY}-{0M}-{0D}")
     {:noreply, push_patch(socket, to: "/#{today}")}
   end
 
+  @impl true
   def handle_event("dec_week", _, socket) do
     today = Timex.shift(socket.assigns.today, weeks: -1)
             |> Timex.format!("{YYYY}-{0M}-{0D}")
     {:noreply, push_patch(socket, to: "/#{today}")}
   end
 
+  @impl true
   def handle_event("set_today", _, socket) do
-    today = Timex.today("America/Chicago")
+    today = Timex.today(Meet.timezone())
             |> Timex.format!("{YYYY}-{0M}-{0D}")
     {:noreply, push_patch(socket, to: "/#{today}")}
   end
 
+  @impl true
   def handle_event("select_time", %{"time" => timestamp}, socket) do
     selected = Timex.parse!(timestamp, "{ISO:Extended:Z}")
-               |> Timex.to_datetime("America/Chicago")
+               |> Timex.to_datetime(Meet.timezone())
     {:noreply, assign(socket, selected: selected)}
   end
 
+  @impl true
   def handle_event("schedule", _, socket) do
-    IO.inspect "DOING IT, #{socket.assigns[:selected]}"
-    {:noreply, socket}
+    date = Timex.format!(socket.assigns.selected, MeetWeb.DetailFormLive.expected_date_format())
+    time = Timex.format!(socket.assigns.selected, MeetWeb.DetailFormLive.expected_time_format())
+    {:noreply, push_redirect(socket, to: Routes.live_path(socket, MeetWeb.DetailFormLive, date, time))}
   end
 
   defp weekdays(day) do
@@ -88,11 +84,11 @@ defmodule MeetWeb.TimeSelectLive do
   end
 
   def is_today?(day) do
-    Timex.diff(Timex.today("America/Chicago"), day, :days) == 0
+    Timex.diff(Timex.today(Meet.timezone()), day, :days) == 0
   end
 
   def is_past?(day) do
-    Timex.diff(day, Timex.now("America/Chicago"), :days) < 0  
+    Timex.diff(day, Timex.now(Meet.timezone()), :days) < 0  
   end
 
   def is_selected?(nil, _), do: false
@@ -101,13 +97,21 @@ defmodule MeetWeb.TimeSelectLive do
   end
 
   def week_contains_today(week) do
-    today = Timex.now("America/Chicago")
+    today = Timex.now(Meet.timezone())
     Enum.find(week, fn({d,_}) -> Timex.diff(d, today, :days) == 0 end) != nil
   end
 
   def all_weekdays_are_past(week) do
     Enum.all?(week, fn({d,_}) -> is_past?(d) end)
   end
+
+  def date_from_params(%{"date" => date}) do
+    case Timex.parse(date, "{YYYY}-{0M}-{0D}") do
+      {:ok, date} -> date
+      _ -> date_from_params(nil)
+    end
+  end
+  def date_from_params(_), do: Timex.now(Meet.timezone())
 
   defp build_week(day, events) do
     weekdays(day)
@@ -118,7 +122,5 @@ defmodule MeetWeb.TimeSelectLive do
       Timex.diff(d1, d2) <= 0
     end)
   end
-
-
 
 end

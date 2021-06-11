@@ -19,6 +19,7 @@ defmodule MeetWeb.Router do
 
     live "/", TimeSelectLive
     live "/:date", TimeSelectLive
+    live "/:date/:time", DetailFormLive
   end
 
   # Other scopes may use custom stacks.
