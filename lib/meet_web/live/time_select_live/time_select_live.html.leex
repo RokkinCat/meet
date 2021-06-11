@@ -1,0 +1,44 @@
+<div class="controls">
+  <div class="title">
+    Week of <%= Timex.format!(weekdays(@today).from, "{Mfull} {D}, {YYYY}") %>
+  </div>
+  <div class="nav">
+    <%= if !week_contains_today(@weekdays) do %>
+    <button class="left" phx-click="dec_week">&larr;</button>
+    <% end %>
+    <button class="today" phx-click="set_today">Today</button>
+    <button class="right" phx-click="inc_week">&rarr;</button>
+  </div>
+</div>
+<div class="week">
+  <%= Enum.map(@weekdays, fn({day, times}) -> %>
+    <div class="
+                day 
+                <%= Timex.format!(day, "{WDfull}") %> 
+                <%= if is_today?(day), do: "today" %>
+                <%= if is_past?(day), do: "disable" %>
+                <%= if Enum.count(times) == 0, do: "disable" %>
+
+     ">
+      <div class="header"><%= Timex.format!(day, "{WDshort} {M}/{D}")%></div>
+      <ol class="openings">
+        <%= Enum.map(times, fn(time) -> %> 
+          <li 
+          class="time
+          <%= if is_selected?(@selected, time), do: "selected" %>
+                 "
+        phx-click="select_time" phx-value-time="<%= Timex.format!(time, "{ISO:Extended:Z}") %>"><%= Timex.format!(time, "{h12}:{m} {am}") %></li>
+        <% end) %>
+      </ol>
+    </div>
+  <% end) %>
+</div>
+<div class="mrow">
+  <div class="disclaimer">
+  * all times are central time zone
+  </div>
+  <%= if @selected do %>
+    <button class="schedule" phx-click="schedule">Schedule on <%= Timex.format!(@selected, "{M}/{D} at {h12}:{m} {am}") %> Central</button>
+  <% end %>
+</div>
+

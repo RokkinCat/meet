@@ -17,8 +17,8 @@ defmodule MeetWeb.Router do
   scope "/", MeetWeb do
     pipe_through :browser
 
-    live "/", PageLive, :index
-    live "/:date", PageLive, :index
+    live "/", TimeSelectLive
+    live "/:date", TimeSelectLive
   end
 
   # Other scopes may use custom stacks.
