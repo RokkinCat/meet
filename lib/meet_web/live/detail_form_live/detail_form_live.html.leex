@@ -1,0 +1,30 @@
+<h1>Scheduling a meeting with <%= Meet.name() %> on <%= Timex.format!(@datetime, "{M}/{D} at {h12}:{m} {am}") %> central</h1>
+<div class="form">
+  <%= f = form_for :meeting, "#", [phx_change: :validate, phx_submit: :send] %>
+
+  <div>
+    <%= label f, :email, "Your email address" %>
+    <%= email_input f, :email, required: true %> 
+    <%= error_tag f, :email %>
+  </div>
+  <div>
+    <%= label f, :subject %>
+    <%= text_input f, :subject, required: true %> 
+    <%= error_tag f, :subject %>
+  </div>
+  <div>
+    <%= label f, :agenda %>
+    <%= textarea f, :agenda, rows: 10, style: "height: auto" %>
+    <%= error_tag f, :agenda %>
+  </div>
+
+  <div>
+      <%= label f, :include_video_link do %>
+        <%= checkbox f, :include_video_link %> 
+        Include video conference link
+      <% end %>
+  </div>
+
+  <button class="schedule">Send invite</button>
+  </form>
+</div>

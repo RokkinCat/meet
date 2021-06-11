@@ -1,6 +1,11 @@
 /* This file is for your main application css. */
 @import "./phoenix.css";
 
+body {
+  margin: 0;
+  padding: 0;
+}
+
 
 .week {
   display: grid;
@@ -113,4 +118,17 @@
   &:hover {
     background-color: #DB8679;
   }
+}
+
+.centered {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  width: 100vw;
+}
+
+
+#thanks {
+  text-align: center;
 }

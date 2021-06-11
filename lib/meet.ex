@@ -11,4 +11,13 @@ defmodule Meet do
     Application.get_env(:meet, :timezone)
   end
 
+  def email() do
+    Application.get_env(:meet, :email)
+  end
+
+  def name() do
+    Application.get_env(:meet, :name)
+  end
+
+
 end

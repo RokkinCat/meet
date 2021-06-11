@@ -19,4 +19,31 @@ defmodule MeetWeb.DetailFormLive do
     end
   end
 
+  @impl true
+  def handle_event("validate", _, socket) do
+    {:noreply, socket}
+  end
+
+  @impl true
+  def handle_event("send", params, socket) do
+    %{
+      "meeting" => %{
+        "email" => email,
+        "subject" => subject,
+        "agenda" => agenda,
+        "include_video_link" => include_video_link
+      }
+    } = params
+
+    Meet.InviteMailer.send_meeting_invite(
+      email, 
+      socket.assigns[:datetime], 
+      subject, 
+      agenda, 
+      include_video_link
+    )
+
+    {:noreply, push_redirect(socket, to: Routes.page_path(socket, :thank_you))}
+  end
+
 end
