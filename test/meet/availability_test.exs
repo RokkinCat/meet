@@ -2,19 +2,20 @@ defmodule Meet.AvailabilityTest do
   use ExUnit.Case
 
   @schedule ICalendar.from_ics(
-"""
-BEGIN:VCALENDAR
-VERSION:2.0
-CALSCALE:GREGORIAN
-PRODID:-//Elixir ICalendar//RKKN Meet//EN
-BEGIN:VEVENT
-DTSTART:20210706T173000Z
-DTEND:20210706T182000Z
-UID:3qke9bactdnomd0vkiiqj3flsg@google.com
-SUMMARY:BOOK CLUB
-END:VEVENT
-END:VCALENDAR
-""")
+    """
+    BEGIN:VCALENDAR
+    VERSION:2.0
+    CALSCALE:GREGORIAN
+    PRODID:-//Elixir ICalendar//RKKN Meet//EN
+    BEGIN:VEVENT
+    DTSTART:20210706T173000Z
+    DTEND:20210706T182000Z
+    UID:3qke9bactdnomd0vkiiqj3flsg@google.com
+    SUMMARY:BOOK CLUB
+    END:VEVENT
+    END:VCALENDAR
+    """
+  )
 
   import Meet.Availability
 
