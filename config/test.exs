@@ -20,3 +20,4 @@ config :meet, MeetWeb.Endpoint,
 
 # Print only warnings and errors during test
 config :logger, level: :warn
+
