@@ -19,5 +19,13 @@ defmodule Meet do
     Application.get_env(:meet, :name)
   end
 
+  def meeting_length() do
+    Application.get_env(:meet, :meeting_length)
+  end
+
+  def link() do
+    Application.get_env(:meet, :video_link)
+  end
+
 
 end

@@ -27,6 +27,8 @@ config :logger, :console,
 config :meet, :timezone, "America/Chicago"
 config :meet, :email, "nick@rokkincat.com"
 config :meet, :name, "Nick Gartmann"
+config :meet, :meeting_length, 60
+config :meet, :video_link, "https://whereby.com/nickgartmann"
 
 # Use Jason for JSON parsing in Phoenix
 config :phoenix, :json_library, Jason

@@ -15,6 +15,7 @@ defmodule MeetWeb.DetailFormLive do
       {:error, _} -> 
         {:noreply, push_redirect(socket, to: Routes.live_path(socket, MeetWeb.TimeSelectLive, date))}
       {:ok, datetime} ->
+        datetime = Timex.to_datetime(datetime, Meet.timezone())
         {:noreply, assign(socket, datetime: datetime)}
     end
   end
