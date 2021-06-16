@@ -24,11 +24,17 @@ config :logger, :console,
   format: "$time $metadata[$level] $message\n",
   metadata: [:request_id]
 
-config :meet, :timezone, "America/Chicago"
-config :meet, :email, "nick@rokkincat.com"
-config :meet, :name, "Nick Gartmann"
-config :meet, :meeting_length, 60
-config :meet, :video_link, "https://whereby.com/nickgartmann"
+config :meet,
+  timezone: "America/Chicago",
+  email: "nick@rokkincat.com",
+  name: "Nick Gartmann",
+  meeting_length: 60,
+  video_link: "https://whereby.com/nickgartmann",
+  urls: [
+    "https://calendar.google.com/calendar/ical/nick%40rokkincat.com/private-71a05a1c5852bc2c87de0256645b8220/basic.ics",
+    "https://3.basecamp.com/3992585/my/schedules/feed/2JvLsyCPTbryXJWWvhmFKX6K.ics"
+  ]
+
 
 # Use Jason for JSON parsing in Phoenix
 config :phoenix, :json_library, Jason

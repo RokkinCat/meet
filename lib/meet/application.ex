@@ -14,10 +14,13 @@ defmodule Meet.Application do
       # Start the PubSub system
       {Phoenix.PubSub, name: Meet.PubSub},
       # Start the Endpoint (http/https)
-      MeetWeb.Endpoint
+      MeetWeb.Endpoint,
+      {Finch, name: Finch.Meet}
       # Start a worker by calling: Meet.Worker.start_link(arg)
       # {Meet.Worker, arg}
     ]
+
+    :ets.new(:calendar, [:set, :public, :named_table])
 
     # See https://hexdocs.pm/elixir/Supervisor.html
     # for other strategies and supported options

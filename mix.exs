@@ -48,7 +48,8 @@ defmodule Meet.MixProject do
       {:jason, "~> 1.0"},
       {:plug_cowboy, "~> 2.0"},
       {:icalendar, "~> 1.1.0"},
-      {:timex, "~> 3.7.5"}
+      {:timex, "~> 3.7.5"},
+      {:finch, "~> 0.7"}
     ]
   end
 

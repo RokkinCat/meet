@@ -6,26 +6,17 @@ defmodule MeetWeb.TimeSelectLive do
   @impl true
   def mount(params, _session, socket) do
     today = date_from_params(params)
+    send(self(), :load_calendars)
+    weekdays = build_week(today, [])
+    {:ok, assign(socket, today: today, weekdays: weekdays, events: [], selected: nil, loading: true)}
+  end
 
-    {:ok, raw} = File.read("./nick_at_rokkincat.ics")
-
-    events = ICalendar.from_ics(raw)
-             |> Enum.flat_map(fn(event) ->
-               # Right now this handles recurring events by extrapolating their recur rule one year into
-               # the future and then merging them into the whole list
-               recurrences = ICalendar.Recurrence.get_recurrences(event, Timex.shift(today, years: 1))
-               |> Enum.to_list()
-               case Enum.at(recurrences, 0) do
-                 [] -> [event]
-                 _ -> Enum.concat([event], recurrences)
-               end
-             end)
+  @impl true
+  def handle_info(:load_calendars, socket) do
+    events = Meet.Calendar.all()
              |> Enum.filter(fn(event) -> !is_past?(event.dtstart) end) # This probably breaks for multi-day events
-             |> Enum.sort(fn(a,b) -> Timex.diff(today, b.dtstart) > Timex.diff(today, a.dtstart) end)
-
-    weekdays = build_week(today, events)
-
-    {:ok, assign(socket, today: today, weekdays: weekdays, events: events, selected: nil)}
+    weekdays = build_week(socket.assigns[:today], events)
+    {:noreply, assign(socket, weekdays: weekdays, events: events, loading: false)}
   end
 
   @impl true

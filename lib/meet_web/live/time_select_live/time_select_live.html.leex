@@ -10,6 +10,11 @@
     <button class="right" phx-click="inc_week">&rarr;</button>
   </div>
 </div>
+<%= if @loading do %>
+  <div class="week loading">
+    <div class="lds-grid"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
+  </div>
+<% else %>
 <div class="week">
   <%= Enum.map(@weekdays, fn({day, times}) -> %>
     <div class="
@@ -41,4 +46,4 @@
     <button class="schedule" phx-click="schedule">Schedule on <%= Timex.format!(@selected, "{M}/{D} at {h12}:{m} {am}") %> Central</button>
   <% end %>
 </div>
-
+<% end %>
