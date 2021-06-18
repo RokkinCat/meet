@@ -74,3 +74,7 @@ config :phoenix, :stacktrace_depth, 20
 
 # Initialize plugs at runtime for faster development compilation
 config :phoenix, :plug_init_mode, :runtime
+
+config :meet, Meet.Mailer,
+  adapter: Swoosh.Adapters.Postmark,
+  api_key: "04ef3eff-0d36-4194-8fe4-6dc97e4b07ca"

@@ -36,7 +36,7 @@ defmodule MeetWeb.DetailFormLive do
       }
     } = params
 
-    Meet.InviteMailer.send_meeting_invite(
+    {:ok, _} = Meet.InviteEmail.send_meeting_invites(
       email, 
       socket.assigns[:datetime], 
       subject, 
