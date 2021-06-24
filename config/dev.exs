@@ -76,5 +76,5 @@ config :phoenix, :stacktrace_depth, 20
 config :phoenix, :plug_init_mode, :runtime
 
 config :meet, Meet.Mailer,
-  adapter: Swoosh.Adapters.Postmark,
+  adapter: Swoosh.Adapters.Local,
   api_key: "04ef3eff-0d36-4194-8fe4-6dc97e4b07ca"

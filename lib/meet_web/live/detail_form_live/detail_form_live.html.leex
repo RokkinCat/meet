@@ -4,12 +4,12 @@
 
   <div>
     <%= label f, :email, "Your email address" %>
-    <%= email_input f, :email, required: true %> 
+    <%= email_input f, :email, value: "nick.gartmann@gmail.com", required: true %> 
     <%= error_tag f, :email %>
   </div>
   <div>
     <%= label f, :subject %>
-    <%= text_input f, :subject, required: true %> 
+    <%= text_input f, :subject, value: "testing", required: true %> 
     <%= error_tag f, :subject %>
   </div>
   <div>

@@ -14,16 +14,7 @@ defmodule MeetWeb.Router do
     plug :accepts, ["json"]
   end
 
-  scope "/", MeetWeb do
-    pipe_through :browser
-
-    get "/thanks", PageController, :thank_you
-
-    live "/", TimeSelectLive
-    live "/:date", TimeSelectLive
-    live "/:date/:time", DetailFormLive
-
-  end
+  
 
   # Other scopes may use custom stacks.
   # scope "/api", MeetWeb do
@@ -42,7 +33,20 @@ defmodule MeetWeb.Router do
 
     scope "/" do
       pipe_through :browser
+      forward "/mailbox", Plug.Swoosh.MailboxPreview, [base_path: "/mailbox"]
       live_dashboard "/dashboard", metrics: MeetWeb.Telemetry
     end
+
+  end
+
+  scope "/", MeetWeb do
+    pipe_through :browser
+
+    get "/thanks", PageController, :thank_you
+
+    live "/", TimeSelectLive
+    live "/:date", TimeSelectLive
+    live "/:date/:time", DetailFormLive
+
   end
 end
