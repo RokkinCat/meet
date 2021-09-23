@@ -65,7 +65,6 @@ defmodule Meet.InviteEmail do
     |> html_body(EEx.eval_file("lib/meet/templates/requester_email.html.eex", include_video_link: include_video_link, video_link: Meet.link()))
     |> attachment(build_ics_attachment(ics))
     |> Meet.Mailer.deliver
-    |> IO.inspect
   end
 
   defp build_event(uid, summary, description, dtstart, dtend, organizer, attendees, url) when is_list(attendees) do

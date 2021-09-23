@@ -20,4 +20,14 @@ if config_env() == :prod do
     socket_options: [:inet6],
     pool_size: String.to_integer(System.get_env("POOL_SIZE") || "10")
 
+  password = System.get_env("GMAIL_PASSWORD") || raise "Missing GMAIL_PASSWORD"
+
+  config :meet, Meet.Mailer,
+    adapter: Swoosh.Adapters.SMTP,
+    relay: "smtp.gmail.com",
+    username: "nick@rokkincat.com",
+    password: password,
+    ssl: true,
+    port: 465
+
 end

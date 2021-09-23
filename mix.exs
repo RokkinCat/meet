@@ -51,7 +51,8 @@ defmodule Meet.MixProject do
       {:timex, "~> 3.7.5"},
       {:finch, "~> 0.7"},
       {:swoosh, "~> 1.3"},
-      {:uuid, "~> 1.1" }
+      {:uuid, "~> 1.1" },
+      {:gen_smtp, "~> 1.1"}
     ]
   end
 
