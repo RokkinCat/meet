@@ -29,12 +29,10 @@ defmodule MeetWeb.Router do
   # you can use Plug.BasicAuth to set up some basic authentication
   # as long as you are also using SSL (which you should anyway).
   if Mix.env() in [:dev, :test] do
-    import Phoenix.LiveDashboard.Router
 
     scope "/" do
       pipe_through :browser
       forward "/mailbox", Plug.Swoosh.MailboxPreview, [base_path: "/mailbox"]
-      live_dashboard "/dashboard", metrics: MeetWeb.Telemetry
     end
 
   end

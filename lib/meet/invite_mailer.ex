@@ -3,7 +3,7 @@ defmodule Meet.Mailer do
 end
 
 defmodule Meet.InviteEmail do
-  import Swoosh.Email
+  use Phoenix.Swoosh, view: MeetWeb.EmailView
 
   def send_meeting_invites(to_email, at, subject, agenda, include_video_link \\ true) do
 
@@ -38,7 +38,7 @@ defmodule Meet.InviteEmail do
     |> from("noreply@rokkincat.com")
     |> reply_to(to)
     |> subject("Meeting with #{to}: #{subject}")
-    |> html_body(EEx.eval_file("lib/meet/templates/host_email.html.eex", include_video_link: include_video_link, video_link: Meet.link()))
+    |> render_body("host.html", include_video_link: include_video_link, video_link: Meet.link())
     |> attachment(build_ics_attachment(ics))
     |> Meet.Mailer.deliver
 
@@ -62,7 +62,7 @@ defmodule Meet.InviteEmail do
     |> from(Meet.email())
     |> reply_to(Meet.email())
     |> subject("Meeting with Nick Gartmann: #{event.summary}")
-    |> html_body(EEx.eval_file("lib/meet/templates/requester_email.html.eex", include_video_link: include_video_link, video_link: Meet.link()))
+    |> render_body("requester.html", include_video_link: include_video_link, video_link: Meet.link())
     |> attachment(build_ics_attachment(ics))
     |> Meet.Mailer.deliver
   end
