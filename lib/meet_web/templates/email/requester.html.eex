@@ -1,1 +1,10 @@
-<h1>Requester</h1>
+<h1>We're all set!</h1>
+<p>I'm looking forward to our meeting on <%= Timex.format!(@start_at, "{M}/{D} at {h12}:{m} {am}") %> central<p>
+
+<%= if @include_video_link do %>
+  <p>To join, follow <a href="<%= @video_link %>">this link<a>.</p>
+<% end %>
+
+<h2>Agenda</h2>
+<pre><%= @agenda %></pre>
+

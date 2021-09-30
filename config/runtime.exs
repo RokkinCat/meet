@@ -2,7 +2,7 @@ import Config
 
 if config_env() == :prod do
   secret_key_base = System.get_env("SECRET_KEY_BASE") || raise "Missing SECRET_KEY_BASE config variable"
-  app_name = System.get_env("FLY_APP_NAME") || raise "FLY_APP_NAME missing"
+  _app_name = System.get_env("FLY_APP_NAME") || raise "FLY_APP_NAME missing"
 
   config :meet, MeetWeb.Endpoint,
     server: true,

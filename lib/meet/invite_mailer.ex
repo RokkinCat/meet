@@ -27,7 +27,7 @@ defmodule Meet.InviteEmail do
       agenda,
       start_at, 
       end_at,
-      "noreply@rokkincat.com",
+      Meet.email(),
       [Meet.email(), to],
       (if (include_video_link), do: Meet.link())
     )
@@ -35,10 +35,18 @@ defmodule Meet.InviteEmail do
 
     new() 
     |> to(Meet.email())
-    |> from("noreply@rokkincat.com")
+    |> from(Meet.email())
     |> reply_to(to)
     |> subject("Meeting with #{to}: #{subject}")
-    |> render_body("host.html", include_video_link: include_video_link, video_link: Meet.link())
+    |> render_body(
+      "host.html", 
+      include_video_link: include_video_link, 
+      video_link: Meet.link(),
+      subject: subject,
+      agenda: agenda,
+      start_at: Timex.parse!(start_at, "{ISO:Basic:Z}"),
+      with: to
+    )
     |> attachment(build_ics_attachment(ics))
     |> Meet.Mailer.deliver
 
@@ -62,8 +70,15 @@ defmodule Meet.InviteEmail do
     |> from(Meet.email())
     |> reply_to(Meet.email())
     |> subject("Meeting with Nick Gartmann: #{event.summary}")
-    |> render_body("requester.html", include_video_link: include_video_link, video_link: Meet.link())
     |> attachment(build_ics_attachment(ics))
+    |> render_body(
+      "requester.html", 
+      include_video_link: include_video_link, 
+      video_link: Meet.link(),
+      subject: subject,
+      agenda: agenda,
+      start_at: Timex.parse!(start_at, "{ISO:Basic:Z}")
+    )
     |> Meet.Mailer.deliver
   end
 

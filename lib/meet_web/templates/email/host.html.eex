@@ -1,1 +1,16 @@
-<h1>Host</h1>
+<h1><%= @with %> has booked a meeting</h1>
+<table>
+  <tr>
+    <td>Starts at</td>
+    <td><%= Timex.format!(@start_at, "{M}/{D} at {h12}:{m} {am}") %> central</td>
+  </tr>
+  <tr>
+    <td>Subject</td>
+    <td><%= @subject %></td>
+  </tr>
+  <tr>
+    <td>Agenda</td>
+    <td><pre><%= @agenda %></pre></td>
+  </tr>
+</table>
+
